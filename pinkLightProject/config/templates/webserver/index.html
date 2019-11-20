@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+
+
+{% block body %}
+
+<div class="container">
+  <div class="mt-4">
+    <a class="btn btn-warning" href="{% url 'webserver:new' %}">[열차 추가]</a>
+  </div>
+
+  <div class="row mt-4">
+
+    {% for train in trains %}
+      {% include 'webserver/_trains.html' %}
+    {% empty %}
+    <p>열차에 대한 정보가 없습니다.</p>
+    {% endfor %}
+  </div>
+
+
+</div>
+
+
+{% endblock  %}

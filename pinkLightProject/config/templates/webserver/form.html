@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+
+
+{% block body %}
+
+<form action="{% url 'webserver:new' %}" method="post" class="form">
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  {% buttons %}
+    <button type="submit" class="btn btn-warning">
+      열차 추가
+    </button>
+  {% endbuttons %}
+</form>
+
+
+{% endblock  %}
