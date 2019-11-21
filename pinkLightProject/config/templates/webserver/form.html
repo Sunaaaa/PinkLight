@@ -5,12 +5,16 @@
 
 {% block body %}
 
-<form action="{% url 'webserver:new' %}" method="post" class="form">
+<form action="" method="post" class="form">
   {% csrf_token %}
   {% bootstrap_form form %}
   {% buttons %}
     <button type="submit" class="btn btn-warning">
-      열차 추가
+    {% if request.resolver_match.url_name == 'new' %}
+          추가하기
+    {% else %}
+          수정하기  
+    {% endif %}
     </button>
   {% endbuttons %}
 </form>

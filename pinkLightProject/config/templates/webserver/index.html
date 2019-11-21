@@ -6,17 +6,37 @@
 {% block body %}
 
 <div class="container">
-  <div class="mt-4">
-    <a class="btn btn-warning" href="{% url 'webserver:new' %}">[열차 추가]</a>
-  </div>
+    {% if user.is_authenticated %}
+      <div class="mt-4">
+        <a class="btn btn-warning" href="{% url 'webserver:new' %}">[열차 추가]</a>
+      </div>
+    {% endif %}
+
+  {% regroup trains by country as country_list %}
+
+  <ul>
+      {% for country in country_list %}
+          <li>{{ country.grouper }}
+              <ul>
+              {% for city in country.train_no %}
+                  <li>{{ city.slot_no }}: {{ city.seat_no }}</li>
+              {% endfor %}
+              </ul>
+          </li>
+      {% endfor %}
+  </ul>
 
   <div class="row mt-4">
+    {% if user.is_authenticated %}
+      {% for train in trains %}
+        {% include 'webserver/_trains.html' %}
+      {% empty %}
+      <p>열차에 대한 정보가 없습니다.</p>
+      {% endfor %}    
+    {% else %}
+      <p>관리자 전용 </p>
+    {% endif %}
 
-    {% for train in trains %}
-      {% include 'webserver/_trains.html' %}
-    {% empty %}
-    <p>열차에 대한 정보가 없습니다.</p>
-    {% endfor %}
   </div>
 
 

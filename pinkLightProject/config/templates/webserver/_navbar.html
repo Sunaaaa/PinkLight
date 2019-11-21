@@ -1,0 +1,17 @@
+<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+  <ul class="nav justify-content-end">
+  {% if user.is_authenticated %}
+    <li class="nav-item">
+      <a class="nav-link active" href="{% url 'webserver:index' %}">Home</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" href="{% url 'webserver:index' %}">Logout</a>
+    </li>
+  {% else %}
+    <li class="nav-item">
+      <a> 관리자 전용 페이지 입니다.  </a>
+    </li>
+  {% endif %}
+</ul>  
+</nav>
+
