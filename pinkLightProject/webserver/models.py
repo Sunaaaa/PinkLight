@@ -8,6 +8,12 @@ class Train(models.Model):
     empty = models.BooleanField()
 
     def __str__(self):
-        return f'[{self.train_no}] {self.seat_no} 번칸 {self.seat_no} : 사용여부: {self.empty}'
+        return f'[{self.train_no}] {self.slot_no} 번칸 {self.seat_no} : 사용여부: {self.empty}'
 
 
+class Notification(models.Model):
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'[{self.pk}알림] {self.content} : {self.created_at}에 생성'

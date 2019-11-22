@@ -1,17 +1,28 @@
-<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-  <ul class="nav justify-content-end">
-  {% if user.is_authenticated %}
-    <li class="nav-item">
-      <a class="nav-link active" href="{% url 'webserver:index' %}">Home</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link active" href="{% url 'webserver:index' %}">Logout</a>
-    </li>
-  {% else %}
-    <li class="nav-item">
-      <a> 관리자 전용 페이지 입니다.  </a>
-    </li>
-  {% endif %}
-</ul>  
+<nav class="mt-5 mb-5 navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+  <a class="navbar-brand" href="#">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'webserver:index' %}">홈으로</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'webserver:new' %}">열차추가</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'webserver:index' %}">로그아웃</a>
+        </li>
+      {% else %}
+        <li class="nav-item">
+          <a> 관리자 전용 페이지 입니다.  </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'accounts:login' %}">Login</a>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
 </nav>
-

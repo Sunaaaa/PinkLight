@@ -6,12 +6,20 @@
 {% block body %}
 
 <div class="container">
-    {% if user.is_authenticated %}
-      <div class="mt-4">
-        <a class="btn btn-warning" href="{% url 'webserver:new' %}">[열차 추가]</a>
-      </div>
-    {% endif %}
+      {% comment %} {% if user.is_authenticated %}
+        <div class="mt-4">
+          <a class="btn btn-warning" href="{% url 'webserver:new' %}">[열차 추가]</a>
+        </div>
+      {% endif %} {% endcomment %}
+    
+    {% comment %} {{pink_light}} {% endcomment %}
 
+    {% if pink_light %}
+      {% include 'webserver/_toast.html' %}
+    {% else %}
+    {% endif %}
+    
+{% comment %} 
   {% regroup trains by country as country_list %}
 
   <ul>
@@ -25,7 +33,7 @@
           </li>
       {% endfor %}
   </ul>
-
+{% endcomment %}
   <div class="row mt-4">
     {% if user.is_authenticated %}
       {% for train in trains %}
@@ -39,8 +47,17 @@
 
   </div>
 
+<div>
 
-</div>
+<script>
+  const closeButtons = document.querySelectorAll('.close-button')
+  closeButtons.forEach(button => {
+    closeButton.addEventListener('click', function(e){
+      console.log(e)
+    })
+  })
 
+
+</script>
 
 {% endblock  %}

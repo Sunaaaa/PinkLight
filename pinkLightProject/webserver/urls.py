@@ -11,4 +11,5 @@ urlpatterns = [
     path('<int:train_pk>/delete/', views.delete, name="delete"),
     path('<str:train_name>/station_info/', views.station_info, name="station_info"),
     path('<str:station>/station_status', views.station_status, name="station_status"),
+    path('<str:seat_info>/pink_light', views.pink_light, name="pink_light"),
 ]

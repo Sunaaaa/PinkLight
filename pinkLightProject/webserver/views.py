@@ -5,19 +5,60 @@ from .forms import TrainForm
 from django.http import JsonResponse
 from django.db.models import Count
 import requests
+from django.views.decorators.csrf import csrf_exempt
 
+def pink_light(request, seat_info):
+    train_no = seat_info[:6]
+    slot_no = seat_info[6:9]
+    seat_no = seat_info[9:]
+
+    train = Train.objects.get(train_no=train_no, slot_no=slot_no, seat_no=seat_no)
+    print(train)
+    if train.empty :
+        train.empty = False
+    else :
+        train.empty = True
+    print(train_no, slot_no, seat_no)
+    train.save()
+    print("변경후")
+    print(train, seat_info, train.train_no, train.slot_no, train.seat_no, train.empty)
+
+    trains = Train.objects.all()
+
+    context = {
+        'pink_light' : train,
+        'trains' : trains,
+    }
+    return render(request,'webserver/index.html', context)
+
+
+@csrf_exempt 
 def station_status(request, station):
     print('뿜뿜뿜')
     print(type(station))
-    # station_status = request.get(f'http://swopenapi.seoul.go.kr/api/subway/674d6171516d696e3432724143445a/json/realtimeStationArrival/0/5/{station}').json
     station_status = requests.get(f'http://swopenapi.seoul.go.kr/api/subway/674d6171516d696e3432724143445a/json/realtimeStationArrival/0/5/{station}').json()
     print(type(station_status))
-    # print(station_status[realtimeArrivalList])
     data = station_status['realtimeArrivalList']
     print(len(data))
+    print(data[0].get('btrainNo'))
+    
+
+    btrainNo = []
+    trainLineNm = []
+    arvlMsg2 = []
+    empty_seat = []
+
+    for i in range(len(data)):
+        btrainNo.append(data[i].get('btrainNo'))
+        trainLineNm.append(data[i].get('trainLineNm'))
+        arvlMsg2.append(data[i].get('arvlMsg2'))
+        empty_seat.append(i+1)
+
     context = {
-        'one' : data[0],
-        'two' : data[1],
+        'btrainNo' : btrainNo,
+        'trainLineNm' : trainLineNm,
+        'arvlMsg2' : arvlMsg2,
+        'empty_seat' : empty_seat,
     }
     return JsonResponse(context)
 

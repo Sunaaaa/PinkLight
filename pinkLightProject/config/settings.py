@@ -33,7 +33,9 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # 'channels',
     'webserver',
+    'accounts',
     'websockets',
+    'django.contrib.humanize',
     'django_extensions',
     'bootstrap4',
     'django.contrib.admin',
@@ -47,6 +49,7 @@ INSTALLED_APPS = [
 # Channels
 # ASGI_APPLICATION = 'config.routing.application'
 
+ALLOWED_HOSTS = ['*']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
