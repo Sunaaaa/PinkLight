@@ -14,26 +14,17 @@
     
     {% comment %} {{pink_light}} {% endcomment %}
 
-    {% if pink_light %}
-      {% include 'webserver/_toast.html' %}
-    {% else %}
+  <div class="row mt-4">
+    {% if user.is_authenticated %}
+      {% for notification in notifications %}
+        {% include 'webserver/_toast.html' %}
+      {% empty %}
+      <p>알림이 없습니다. </p>
+      {% endfor %}    
     {% endif %}
-    
-{% comment %} 
-  {% regroup trains by country as country_list %}
 
-  <ul>
-      {% for country in country_list %}
-          <li>{{ country.grouper }}
-              <ul>
-              {% for city in country.train_no %}
-                  <li>{{ city.slot_no }}: {{ city.seat_no }}</li>
-              {% endfor %}
-              </ul>
-          </li>
-      {% endfor %}
-  </ul>
-{% endcomment %}
+  </div>
+
   <div class="row mt-4">
     {% if user.is_authenticated %}
       {% for train in trains %}
@@ -48,16 +39,27 @@
   </div>
 
 <div>
-
+{% comment %} 
 <script>
   const closeButtons = document.querySelectorAll('.close-button')
   closeButtons.forEach(button => {
     closeButton.addEventListener('click', function(e){
-      console.log(e)
+      const notificationId = e.target.dataset.id
+
+      axios.defaults.xsrfCookieName = 'csrftoken'
+      axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+
+      axios.post(`/webserver/${notificationId}/delete_notification`)
+      .then(response => {
+        console.log(response)
+      })
+      .catch(error => {console.log(error)})
+
+
     })
   })
 
 
-</script>
+</script> {% endcomment %}
 
 {% endblock  %}

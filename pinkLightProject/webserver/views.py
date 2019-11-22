@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Train
+from .models import Train, Notification
 from django import forms
 from .forms import TrainForm
 from django.http import JsonResponse
@@ -7,29 +7,52 @@ from django.db.models import Count
 import requests
 from django.views.decorators.csrf import csrf_exempt
 
+# Create your views here.
+@csrf_exempt
+def pp(request, seat_info):
+    context = {
+        'aa' : seat_info,
+    }
+    return JsonResponse(context)
+
+
+@csrf_exempt
 def pink_light(request, seat_info):
     train_no = seat_info[:6]
     slot_no = seat_info[6:9]
     seat_no = seat_info[9:]
 
+    # 임산부석 상태 변경
     train = Train.objects.get(train_no=train_no, slot_no=slot_no, seat_no=seat_no)
-    print(train)
     if train.empty :
         train.empty = False
     else :
         train.empty = True
-    print(train_no, slot_no, seat_no)
     train.save()
-    print("변경후")
-    print(train, seat_info, train.train_no, train.slot_no, train.seat_no, train.empty)
 
-    trains = Train.objects.all()
+    # 열차 정보 & 알림 가져오기
+    status = ""
+    if train.empty:
+        status = "이용 완료"
+    else : 
+        status = "이용 중"
+    content = f'{ train.train_no } 번 열차 {train.slot_no} 번째 칸 {train.seat_no} 번 임산부석 {status}'
+    print(content)
 
-    context = {
-        'pink_light' : train,
-        'trains' : trains,
-    }
-    return render(request,'webserver/index.html', context)
+    notify = Notification.objects.create(content=content)
+
+    return redirect('webserver:index')
+
+    # trains = Train.objects.all()
+
+    # notifications = Notification.objects.all()
+    
+    # context = {
+    #     'pink_light' : train,
+    #     'trains' : trains,
+    #     'notifications': notifications,
+    # }
+    # return render(request,'webserver/index.html', context)
 
 
 @csrf_exempt 
@@ -233,16 +256,16 @@ def station_info(request, train_name):
 
     }
     return JsonResponse(context)
-    
 
-# Create your views here.
 def index(request):
     trains = Train.objects.all()
-    tt = Train.objects.values('train_no').annotate(total=Count('train_no'))
-    print(tt)
+    # tt = Train.objects.values('train_no').annotate(total=Count('train_no'))
+    # print(tt)
+    notifications = Notification.objects.all()
 
     context = {
         'trains' : trains,
+        'notifications': notifications,
     }
     return render(request, 'webserver/index.html', context)
 
@@ -298,3 +321,10 @@ def edit(request, train_pk):
 
 def delete(request):
     pass
+
+def delete_notification(request, notification_pk):
+    if request.method == "POST":
+        noti = Notification.objects.get(pk=notification_pk)
+        noti.delete()
+
+    return redirect('webserver:index')

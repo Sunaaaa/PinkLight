@@ -14,6 +14,7 @@ class Train(models.Model):
 class Notification(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    # train = models.ForeignKey(Train, on_delete=models.CASCADE)
 
     def __str__(self):
         return f'[{self.pk}알림] {self.content} : {self.created_at}에 생성'
