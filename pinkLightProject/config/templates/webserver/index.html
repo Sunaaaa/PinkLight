@@ -33,15 +33,26 @@
 {% block body %}
 
 
-{{tt}}
-{{tttt}}
+<div class="container">
+  <div class="row mt-4">
+    {% if user.is_authenticated %}
+      {% for train in train_no_list %}
+        {% include 'webserver/_trains.html' %}
+      {% empty %}
+      <p>열차에 대한 정보가 없습니다.</p>
+      {% endfor %}    
+    {% else %}
+      <p>관리자 전용 </p>
+    {% endif %}
+
+  </div>
+<div>
 
 <div class="container">
-
   <div class="row mt-4">
     {% if user.is_authenticated %}
       {% for train in trains %}
-        {% include 'webserver/_trains.html' %}
+        {% include 'webserver/_train_no.html' %}
       {% empty %}
       <p>열차에 대한 정보가 없습니다.</p>
       {% endfor %}    
