@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.db.models import Count
 import requests
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Count
 
 # Create your views here.
 @csrf_exempt
@@ -260,10 +261,26 @@ def station_info(request, train_name):
 def index(request):
     trains = Train.objects.all()
     # tt = Train.objects.values('train_no').annotate(total=Count('train_no'))
-    # print(tt)
+    train_list = list(Train.objects.filter().values('train_no').order_by('train_no').distinct())
+    print(type(train_list))
+    print(train_list)
+
+    train_no_list = []
+    t_list = []
+    for train in train_list:
+        print(train.get('train_no'))
+        train_no = train.get('train_no')
+        train_no_list.append(train_no)
+
+        my_train = Train.objects.filter(train_no=train_no)
+        t_list.append(list(my_train))
+
+
     notifications = Notification.objects.all()
 
     context = {
+        'train_no_list' : train_no_list,
+        'tt' : t_list,
         'trains' : trains,
         'notifications': notifications,
     }

@@ -16,6 +16,8 @@
 <body>
 
     {% include 'webserver/_navbar.html' %}
+    {% block notify %}
+    {% endblock  %}
     <div class="container">
     {% block body %}
     {% endblock  %}
