@@ -7,6 +7,7 @@ from django.db.models import Count
 import requests
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Count
+from decouple import config
 
 # Create your views here.
 @csrf_exempt
@@ -59,9 +60,11 @@ def pink_light(request, seat_info):
 @csrf_exempt 
 def station_status(request, station):
     print('뿜뿜뿜')
-    print(type(station))
-    station_status = requests.get(f'http://swopenapi.seoul.go.kr/api/subway/674d6171516d696e3432724143445a/json/realtimeStationArrival/0/5/{station}').json()
-    print(type(station_status))
+    print(station)
+    api_url = 'http://swopenapi.seoul.go.kr/api/subway'
+    key = config('SUBWAY_REAL_TIME')
+    station_status = requests.get(f'{api_url}/{key}/json/realtimeStationArrival/0/5/{station}').json()
+    print(station_status)
     data = station_status['realtimeArrivalList']
     print(len(data))
     print(data[0].get('btrainNo'))
@@ -309,6 +312,15 @@ def new(request):
 
     return render(request, 'webserver/form.html', context)
 
+def train_detail(request, train_no):
+    print(train_no)
+    trains = Train.objects.filter(train_no=train_no)
+    print(trains[0])
+
+    context = {
+        'trains' : trains,
+    }
+    return render(request, 'webserver/train_detail.html', context)
 
 def detail(request, train_pk):
     train = get_object_or_404(Train, pk=train_pk)

@@ -32,7 +32,7 @@
         <a  class="nav-link dropdown-toggle text-light" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"  style="background-color: rgb(255, 128, 128); ">열차 바로가기</a>
         <div class="dropdown-menu">
         {% for train_no in train_no_list %}
-          <a class="dropdown-item" href="#one">{{train_no}}번</a>        
+          <a class="dropdown-item" href="{% url 'webserver:train_detail' train_no %}">{{train_no}}번</a>        
         {% endfor %}
         </div>
       </li>
