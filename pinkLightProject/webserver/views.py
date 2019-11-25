@@ -10,15 +10,20 @@ from django.db.models import Count
 from decouple import config
 
 # Create your views here.
-@csrf_exempt
+# @csrf_exempt
 def pp(request, seat_info):
+    if request.method == "POST":
+        print('난 포스트')
+    else:
+        print('난 갯')
+
     context = {
         'aa' : seat_info,
     }
     return JsonResponse(context)
 
 
-@csrf_exempt
+# @csrf_exempt
 def pink_light(request, seat_info):
     train_no = seat_info[:6]
     slot_no = seat_info[6:9]
@@ -57,9 +62,15 @@ def pink_light(request, seat_info):
     # return render(request,'webserver/index.html', context)
 
 
-@csrf_exempt 
+# @csrf_exempt 
 def station_status(request, station):
     print('뿜뿜뿜')
+
+    if request.method == "POST":
+        print('난 포스트')
+    else:
+        print('난 갯')
+
     print(station)
     api_url = 'http://swopenapi.seoul.go.kr/api/subway'
     key = config('SUBWAY_REAL_TIME')
@@ -67,8 +78,10 @@ def station_status(request, station):
     print(station_status)
     data = station_status['realtimeArrivalList']
     print(len(data))
-    print(data[0].get('btrainNo'))
-    
+    t_no = data[0].get('btrainNo')
+    t_no = "00" + t_no
+    print(t_no)
+
 
     btrainNo = []
     trainLineNm = []
